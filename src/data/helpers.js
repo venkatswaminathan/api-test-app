@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const baseUrl= "http://10.8.16.118:9000";
+let baseUrl= "";
 
 const config = {
     method: 'get',
-    url: baseUrl,
+    url: "",
     headers: {'X-Requested-With': 'XMLHttpRequest2',
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     }
@@ -12,42 +12,15 @@ const config = {
     //withCredentials: true
   };
 export async function getApiData(params){
+  console.log(baseUrl);
+  config.url=baseUrl;
     if(params!==null){      
       config.url= baseUrl+params;
     }
-    else{
-      config.url= baseUrl+"/specialties";
-    }
+    console.log(config.url);
     return await axios.get(config.url);
 }
 
-export async function getNetworks(params){
-  if(params!==null){
-      config.url= baseUrl+params;
-    }
-    else{
-      config.url= baseUrl+"/networks";
-    }
-  return await axios.get(config.url);
+export function setBaseUrl(param){
+    baseUrl = param;
 }
-
-const helpers = {
-  async callApi(params)  {
-    return await getApiData(params);
-  },
-  async getNetworks(params) {
-    return await getNetworks(params);
-  },
-  getApiInfo() {
-    console.log('inside get Api data');
-    axios.all([getSpecialties(), getNetworks()])
-      .then(arr => ({
-      specialtyData: arr[0].data,
-      networkData: arr[1].data
-    }))
-    .catch(err=>({
-      specialtyData: err instanceof Error ? err.Message: err.data
-    }));
-  }
-};
-export default helpers;
