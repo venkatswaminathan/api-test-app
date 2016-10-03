@@ -1,0 +1,11 @@
+//   let method= helpers.getSpecialties();
+//     method.then(function(results){
+//         debugger;
+//         finished=true;
+//       specialtyData = results.data;
+//         });
+//     method.catch(function(error){
+//         debugger;
+//         finished=true;
+//         specialtyData = error instanceof Error ? error.Message: error.data;
+//     });
