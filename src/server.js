@@ -33,7 +33,7 @@ app.get('/coordinates', async (req,res)=>{
     const params = req.originalUrl;
     //debugger;
     //const params={code,text,grouping,classification,specialization};
-    const results = await helpers.callApi(params);
+    const results = await helpers.getApiData(params);
     res.set('x-total-count', _.get(results.headers, 'x-total-count')); 
     res.set('Access-Control-Expose-Headers', 'x-total-count');
     //debugger;
@@ -42,7 +42,7 @@ app.get('/coordinates', async (req,res)=>{
 app.get('/networks', async (req,res) =>{
   const params = req.originalUrl;
     //debugger;
-    const results = await helpers.callApi(params);
+    const results = await helpers.getApiData(params);
     //debugger;
     res.set('x-total-count', _.get(results.headers, 'x-total-count')); 
     res.set('Access-Control-Expose-Headers', 'x-total-count');
@@ -52,7 +52,7 @@ app.get('/networks', async (req,res) =>{
 app.get('/zips',async(req,res) =>{
   const params = req.originalUrl;
     //debugger;
-    const results = await helpers.callApi(params);
+    const results = await helpers.getApiData(params);
     //debugger;
     res.set('x-total-count', _.get(results.headers, 'x-total-count')); 
     res.set('Access-Control-Expose-Headers', 'x-total-count');
