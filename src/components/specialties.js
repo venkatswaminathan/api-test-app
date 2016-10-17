@@ -13,9 +13,9 @@ import Tooltip from 'react-bootstrap/lib/Tooltip';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Alert from 'react-bootstrap/lib/Alert';
 import Label from 'react-bootstrap/lib/Label';
-import axios from 'axios';
-import _ from 'lodash';
-axios.defaults.timeout = 500;
+import * as specialtyActions from "../actions/specialtyActions.js";
+import specialtyStore from "../stores/specialtiesStore.js";
+
 
 const collapseUpText="glyphicon glyphicon-menu-up";
 const collapseDownText="glyphicon glyphicon-menu-down";
@@ -26,6 +26,7 @@ const sortableText="glyphicon glyphicon-sort";
 class Specialties extends Component {  
     constructor (props) {           
       super(props);
+      let returnValues=specialtyStore.getSpecialties();
       this.state={
         open: false,
         alertVisible: false,
@@ -38,10 +39,10 @@ class Specialties extends Component {
         specializationsortableGlyph:sortableText,
         activePage: 1,
         pageLimit:5,
-        specialtyData: [],
+        specialtyData: returnValues.dataField,
         sortColumn:"code",
-        dataCount:0,
-        totalCount:0,
+        dataCount:returnValues.pageCountField,
+        totalCount:returnValues.totalCountField,
         dataUrl: this.props.Source,
         text:"",
         code:"",
@@ -57,7 +58,14 @@ class Specialties extends Component {
       this.closeModal = this.closeModal.bind(this);
       console.log(this.state.codeSortColDesc);      
     }
+    componentWillMount() {
+      specialtyStore.on("change", this.storeDataHandler.bind(this));
+    }
 
+    componentWillUnmount() {
+      specialtyStore.removeListener("change", this.storeDataHandler);
+    }
+    
     openModal () { console.log('msg'); this.setState({open: true}); }
 
     closeModal () { this.setState({open: false}); }
@@ -106,33 +114,8 @@ class Specialties extends Component {
       let serverParams = params.concat("&includeCount=true&offset="+offset+"&limit="+limit+"&sort="+sortCol);
       let callableUrl=this.state.dataUrl+"/specialties"+serverParams;
       console.log(callableUrl);
-      this.serverRequest = axios.get(callableUrl)
-        .then(result =>{
-          console.log('inside result return');            
-          console.log('data length: '+ result.data.length);
-          console.log('total count', result);
-          this.setState({
-              specialtyData: result.data,
-              dataCount: result.data.length,
-              totalCount: _.get(result.headers,"x-total-count"),
-              apiUrl: callableUrl,
-              onSortParams: callParams
-            });
-          console.log(this.state.totalCount);
-          console.log(this.state.specialtyData);                  
-        })
-        .catch(res =>{
-          if(res instanceof Error) {
-            console.log(res.message);
-          } else {
-            console.log(res.data);
-          }
-          this.setState({
-            specialtyData: [],
-            apiUrl: callableUrl,
-            onSortParams: callParams            
-          });
-        });
+      this.setState({apiUrl: callableUrl,onSortParams: callParams});
+      specialtyActions.getSpecialties(callableUrl);
     }
     specialtyTextOnChange (e){
       this.setState(
@@ -173,7 +156,7 @@ class Specialties extends Component {
         activePage: eventKey
       });
       this.searchResults(eventKey);
-    }    
+    }
     sortOnClick(eventKey){
       let sortCol = eventKey.target.id;
       let sortDirection = "";
@@ -232,7 +215,14 @@ class Specialties extends Component {
       sortCol = sortDirection+sortCol;
       this.getServerData(this.state.onSortParams,0,this.state.pageLimit,sortCol);
     }
-
+    storeDataHandler() {
+      let returnValues = specialtyStore.getSpecialties();
+      this.setState({
+            specialtyData: returnValues.dataField,
+            dataCount: returnValues.pageCountField,
+            totalCount: returnValues.totalCountField
+          });
+    }
   render() {
     let tooltip = <Tooltip id="tooltip">Collapse/Hide search results pane!</Tooltip>;
     return (

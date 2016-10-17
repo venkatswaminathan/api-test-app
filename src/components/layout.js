@@ -10,6 +10,10 @@ import Well from 'react-bootstrap/lib/Well';
 import Specialties from './specialties';
 import Coordinates from './coordinates';
 
+let host = location.hostname;
+let port = location.port;
+let protocol = location.protocol;
+let sourceUrl = `${protocol}\\${host}:${port}`;
 class Layout extends Component {  
     constructor (props) {           
       super(props);
@@ -55,11 +59,11 @@ class Layout extends Component {
                                   </ul>
                                   </Well>
                                   <div>
-                                    <Coordinates className="App-entry" Source="http://localhost:3001"/>
+                                    <Coordinates className="App-entry" Source=""/>
                                   </div>
                             </Tab.Pane>                            
                             <Tab.Pane eventKey="second">
-                                <Specialties className="App-entry" Source="http://localhost:3001"/>
+                                <Specialties className="App-entry" Source=""/>
                             </Tab.Pane>
                             <Tab.Pane eventKey="third">
                                 Zips Api Content
