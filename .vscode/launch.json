@@ -16,7 +16,8 @@
             ],
             "env": {
                 "NODE_ENV": "development",
-                "PORT": "3001"
+                "PORT": "3001",
+                "API_URL": "http://10.8.16.118:9000"
             },
             "console": "internalConsole",
             "sourceMaps": true,

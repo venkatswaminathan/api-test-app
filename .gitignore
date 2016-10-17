@@ -2,7 +2,11 @@
 
 # dependencies
 node_modules
-.vscode
+.vscode/*
+dist/*
+iisnode/*
+app.config.dev
+web.config
 
 
 # testing

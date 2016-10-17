@@ -1,7 +1,6 @@
 import axios from 'axios';
-
+axios.defaults.timeout = 500;
 let baseUrl= "";
-
 const config = {
     method: 'get',
     url: "",
