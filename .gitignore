@@ -3,11 +3,10 @@
 # dependencies
 node_modules
 .vscode/*
-dist
-iisnode
+dist/*
+iisnode/*
 app.config.dev
 web.config
-.vscode/launch.json
 
 # testing
 coverage
